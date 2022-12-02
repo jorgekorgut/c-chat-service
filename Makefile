@@ -4,12 +4,13 @@ FLAGS = -Wall -g
 
 LAUNCHER_SRV = serveur_app.o
 LAUNCHER_CLT = client_app.o
+BUILD_PATH = build
 
 SRC_SRV_PATH = src/serveur
-BUILD_SRV_PATH = build/serveur
+BUILD_SRV_PATH = $(BUILD_PATH)/serveur
 
 SRC_CLT_PATH = src/client
-BUILD_CLT_PATH = build/client
+BUILD_CLT_PATH = $(BUILD_PATH)/client
 
 RM = rm
 
@@ -22,8 +23,14 @@ LIBRARIES_CLT = $(shell find $(SRC_CLT_PATH) -name *.h)
 BUILD_SRV = $(addprefix $(BUILD_SRV_PATH)/,$(TARGET_SRV))
 BUILD_CLT = $(addprefix $(BUILD_CLT_PATH)/,$(TARGET_CLT))
 
-app: serveur_app client_app
-	
+app: $(BUILD_PATH) serveur_app client_app
+
+$(BUILD_PATH):
+	@echo Creating folders...
+	@mkdir $(BUILD_PATH)
+	@mkdir $(BUILD_SRV_PATH)
+	@mkdir $(BUILD_CLT_PATH)
+
 serveur_app: $(BUILD_SRV) 
 	$(CC) $(CFLAGS) -o $(LAUNCHER_SRV) $(BUILD_SRV)
 
@@ -39,8 +46,8 @@ $(BUILD_CLT_PATH)/%: $(SRC_CLT_PATH)/%.c $(LIBRARIES_CLT)
 # CLEANING FOLDER
 clear:
 	@echo Cleaning...
-	@$(RM) $(BUILD_SRV_PATH)/*
-	@$(RM) $(BUILD_CLT_PATH)/.*
-	@$(RM) ./*.o
+	@$(RM) -r $(BUILD_PATH)
+	@$(RM) $(LAUNCHER_SRV)
+	@$(RM) $(LAUNCHER_CLT)
 
 	

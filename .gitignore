@@ -1,0 +1,4 @@
+build/client/*
+build/serveur/*
+*.o
+.vscode

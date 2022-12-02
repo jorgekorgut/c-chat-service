@@ -32,7 +32,6 @@ $(BUILD_PATH):
 	@mkdir $(BUILD_PATH)
 	@mkdir $(BUILD_SRV_PATH)
 	@mkdir $(BUILD_CLT_PATH)
-	@mkdir $(DB_PATH)
 
 serveur_app: $(BUILD_SRV) 
 	$(CC) $(CFLAGS) -o $(LAUNCHER_SRV) $(BUILD_SRV) $(LIBS)
@@ -50,7 +49,7 @@ $(BUILD_CLT_PATH)/%: $(SRC_CLT_PATH)/%.c $(LIBRARIES_CLT)
 clear:
 	@echo Cleaning...
 	@$(RM) -r $(BUILD_PATH)
-	@$(RM) -r $(DB_PATH)/*.db
+	@$(RM) $(DB_PATH)/*.db
 	@$(RM) $(LAUNCHER_SRV)
 	@$(RM) $(LAUNCHER_CLT)
 

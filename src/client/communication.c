@@ -2,6 +2,7 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <stdint.h>
 
 #include <stdlib.h>
 #include <string.h>

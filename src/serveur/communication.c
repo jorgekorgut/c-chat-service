@@ -9,6 +9,7 @@
 #include <errno.h>
 
 #include <pthread.h>
+#include <stdint.h>
 #include <string.h>
 #include "serveur.h"
 #include "communication.h"

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <stdint.h>
 #include "serveur.h"
 #include "linkedlist_connexion.h"
 #include "controleur_serveur.h"
@@ -60,7 +61,12 @@ void *gerer_connexion_client(void *descripteur_socket_client_t)
             interpreter_message(connexion_actuelle, message);
         }
     }
-    printf("Utilisateur deconnectee.\n");
+    if(connexion_actuelle->pseudo == NULL){
+        printf("Utilisateur sans nom s'est deconnectee.\n");
+    }else{
+        printf("%s s'est deconnectee.\n", connexion_actuelle->pseudo);
+    }
+    
     fermer_ecouteur_client(connexion_actuelle);
     pthread_detach(pthread_self()); // FIXME : Workaround, trouver une maniere de ecouter la fin de ce thread.
     pthread_exit(NULL);
@@ -83,50 +89,104 @@ void demander_pseudo(connexion_client *connexion)
 
 void interpreter_message(connexion_client *connexion, char *message)
 {
-    int descripteur_socket_client = connexion->descripteur_socket_client;
     printf("Message recu: %s\n", message);
     if (message[0] == '/')
     {
-        if (strcmp(message, "/pseudo"))
+        if (strstr(message, "/pseudo") != NULL)
         {
-            char *pseudo_incertain = message + 8;
-            size_t taille_pseudo = strlen(pseudo_incertain);
-            int changement_reussi = demander_changement_pseudo(pseudo_incertain, taille_pseudo);
-            if (changement_reussi)
-            {
-                char *pseudo = (char *)malloc(sizeof(char) * (taille_pseudo + 1));
-                strcpy(pseudo, pseudo_incertain);
-
-                connexion->pseudo = pseudo;
-                char messsage_changement_pseudo_reussi[] = "Votre pseudo a été modifié.";
-                write(descripteur_socket_client, messsage_changement_pseudo_reussi, strlen(messsage_changement_pseudo_reussi));
-            }
-            else
-            {
-                char messsage_changement_pseudo_echec[] = "Votre pseudo existe deja. Veillez choisir un nouveau.";
-                write(descripteur_socket_client, messsage_changement_pseudo_echec, strlen(messsage_changement_pseudo_echec));
-            }
+            interpreter_commande_pseudo(connexion, message);
         }
-
-        if(strcmp(message, "/aide") == 0)
+        else if (strstr(message, "/aide") != NULL)
         {
-            char message_reponse[TAILLE_MAX_MESSAGE] = "-- Aide --\n \
-                                                        `/pseudo <votre pseudo>` - pour changer de pseudo. \n\
-                                                        `/prive <pseudo> <message>` - pour envoyer des messages prives. ";
-
-            write(descripteur_socket_client, message_reponse, strlen(message_reponse));                                        
+            interpreter_commande_aide(connexion);
+        }
+        else if (strstr(message, "/groupe aide") != NULL)
+        {
+            interpreter_commande_aide_groupe_aide(connexion);
+        }
+        else if (connexion->pseudo == NULL)
+        {
+            afficher_erreur_pseudo_non_renseigne(connexion);
+        }
+        else if (strstr(message, "/prive") != NULL)
+        {
+            interpreter_commande_prive(connexion, message);
         }
     }
     else
     {
         if (connexion->pseudo == NULL)
         {
-            char message_renseigner_pseudo[] = "Vous ne pouvez pas ecrire dans le chat, veillez renseigner votre pseudo!\n`/pseudo <votre pseudo>`";
-            write(descripteur_socket_client, message_renseigner_pseudo, strlen(message_renseigner_pseudo));
+            afficher_erreur_pseudo_non_renseigne(connexion);
         }
         else
         {
             ecrire_a_tous(connexion, message);
         }
     }
+}
+
+void afficher_erreur_pseudo_non_renseigne(connexion_client *connexion)
+{
+    char message_renseigner_pseudo[] = "Vous ne pouvez pas ecrire dans le chat, veillez renseigner votre pseudo!\n`/pseudo <votre pseudo>`";
+    write(connexion->descripteur_socket_client, message_renseigner_pseudo, strlen(message_renseigner_pseudo));
+}
+
+void interpreter_commande_pseudo(connexion_client *connexion, char *message)
+{
+    int descripteur_socket_client = connexion->descripteur_socket_client;
+    char *pseudo_incertain = message + 8;
+    size_t taille_pseudo = strlen(pseudo_incertain);
+    int changement_reussi = demander_changement_pseudo(pseudo_incertain, taille_pseudo);
+    if (changement_reussi)
+    {
+        char *pseudo = (char *)malloc(sizeof(char) * (taille_pseudo + 1));
+        strcpy(pseudo, pseudo_incertain);
+
+        connexion->pseudo = pseudo;
+        char messsage_changement_pseudo_reussi[] = "Votre pseudo a été modifié.";
+        write(descripteur_socket_client, messsage_changement_pseudo_reussi, strlen(messsage_changement_pseudo_reussi));
+    }
+    else
+    {
+        char messsage_changement_pseudo_echec[] = "Votre pseudo existe deja. Veillez choisir un nouveau.";
+        write(descripteur_socket_client, messsage_changement_pseudo_echec, strlen(messsage_changement_pseudo_echec));
+    }
+}
+
+void interpreter_commande_prive(connexion_client *connexion, char *message)
+{
+    int iterateur = 0;
+    char *pseudo_recepteur = message + 7;
+    int pseudo_recepteur_taille = 0;
+    while (pseudo_recepteur[iterateur] != ' ')
+    {
+        iterateur++;
+    }
+    pseudo_recepteur_taille = iterateur;
+    pseudo_recepteur[pseudo_recepteur_taille] = '\0';
+    char *message_prive = pseudo_recepteur + pseudo_recepteur_taille + 1;
+
+    ecrire_a_une_personne(connexion, message_prive, pseudo_recepteur);
+}
+
+void interpreter_commande_aide(connexion_client *connexion)
+{
+    char message_reponse[TAILLE_MAX_MESSAGE] = "-- Aide --\n \
+    `/pseudo <votre pseudo>` - pour changer de pseudo. \n\
+    `/prive <pseudo> <message>` - pour envoyer des messages prives. \n\
+    `/groupe <message> - pour envoyer une message dans votre groupe`\n\
+    `/historique - pour afficher l'historique des messages.`";
+
+    write(connexion->descripteur_socket_client, message_reponse, strlen(message_reponse));
+}
+
+void interpreter_commande_aide_groupe_aide(connexion_client *connexion)
+{
+    interpreter_commande_aide_groupe_aide(connexion);
+    char message_reponse[TAILLE_MAX_MESSAGE] = "-- Aide `groupe` --\n \
+    `/groupe rejoindre <nom>` pour rejoindre un groupe.\n\
+    `/groupe sortir <nom> - pour sortir du groupe.` \n\
+    `/groupe historique` - pour afficher l'historique des messages du groupe.";
+    write(connexion->descripteur_socket_client, message_reponse, strlen(message_reponse));
 }

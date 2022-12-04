@@ -10,7 +10,6 @@ CREATE TABLE comptes(
 DROP TABLE IF EXISTS groupes;
 CREATE TABLE groupes(
     id_groupe INTEGER PRIMARY KEY AUTOINCREMENT,
-    type_groupe TEXT NOT NULL,
     nom TEXT NOT NULL
 );
 

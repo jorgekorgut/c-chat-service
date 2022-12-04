@@ -16,11 +16,13 @@
 #include "ecouteur_client.h"
 #include "linkedlist_connexion.h"
 #include "controleur_serveur.h"
+#include "codes_constantes.h"
 
 pthread_t *thread_ecouter_clients;
 struct sockaddr_in *adresse_serveur;
 size_t taille_adresse;
 int descripteur_socket_serveur;
+
 
 void initialiser_ecoute_clients(int descripteur_socket_serveur_t, struct sockaddr_in *adresse_serveur_t, size_t tailleAdresse_t)
 {

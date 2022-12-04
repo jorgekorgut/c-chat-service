@@ -94,6 +94,7 @@ int fermer_connexion(connexion_client *eliminer)
     free(eliminer->thread_client);
     free(eliminer->adresse);
     free(eliminer->pseudo);
+    free(eliminer->groupe);
     free(eliminer);
 
     return 1;

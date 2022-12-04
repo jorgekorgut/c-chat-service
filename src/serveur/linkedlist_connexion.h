@@ -9,6 +9,7 @@ typedef struct connexion_client_t
     pthread_t *thread_client;
     int descripteur_socket_client;
     char *pseudo;
+    char * groupe;
 
     struct connexion_client_t *prochain;
     struct connexion_client_t *ancient;

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "interface.h"
 #include "serveur.h"
+#include "codes_constantes.h"
 
 void initialiser_interface()
 {
@@ -64,8 +65,8 @@ void afficher_fin_application()
 
 void afficher_aide()
 {
-    char message[] = "-- Aide --\n \
-    `/privee <pseudo> <message>` - pour envoyer des messages prives. \n\
+    char message[] = "-- Aide --\n\
+    `/privee <pseudo> <message>` - pour envoyer des messages prives.\n\
     `/groupe aide - pour afficher les commandes relationne aux groupes.`\n\
     `/historique - pour afficher l'historique des messages.`";
     printf("%s\n", message);
@@ -73,11 +74,10 @@ void afficher_aide()
 
 void afficher_groupe_aide()
 {
-    char message[] = "-- Aide `groupe` --\n \
+    char message[] = "-- Aide `groupe` --\n\
     `/groupe creer <nom> - pour creer un groupe.`\n\
     `/groupe <message> - pour envoyer une message dans votre groupe`\n\
     `/groupe rejoindre <nom>` pour rejoindre un groupe.\n\
-    `/groupe sortir <nom> - pour sortir du groupe.` \n\
-    `/groupe historique` - pour afficher l'historique des messages du groupe.";
+    `/groupe sortir <nom> - pour sortir du groupe.";
     printf("%s\n", message);
 }

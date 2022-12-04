@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "ecouteur_serveur.h"
 #include "communication.h"
+#include "client.h"
 
 int descripteur_socket_serveur = -1;
 
@@ -14,7 +15,7 @@ void *gerer_ecoute_serveur(void *descripteur_socket_serveur_t)
 {
     descripteur_socket_serveur = (intptr_t)descripteur_socket_serveur_t;
     int sortir = 0;
-    char message[500];
+    char message[TAILLE_MAX_MESSAGE];
     int taille_buffer = 50;
     char buffer[taille_buffer];
 

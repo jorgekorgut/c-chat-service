@@ -13,6 +13,7 @@
 #include "serveur.h"
 #include "communication.h"
 #include "interface.h"
+#include "codes_constantes.h"
 
 int descripteur_socket = -1;
 

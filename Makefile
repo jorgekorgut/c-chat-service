@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -g
 FLAGS = -Wall -g
-LIBS = -lsqlite3
+LIBS = -lsqlite3 -lcrypto
 
 LAUNCHER_SRV = serveur_app.o
 LAUNCHER_CLT = client_app.o

@@ -1,10 +1,6 @@
 #ifndef SERVEUR_H
 #define SERVEUR_H
 
-#define NUMBER_OF_CONNECTIONS 5
-#define TAILLE_MAX_MESSAGE 1500
-#define PORT 9999
-
 #include <sys/types.h>
 #include <netinet/in.h>
 

@@ -9,7 +9,6 @@ void initialiser_interface()
     size_t taille_entree = 500;
     char * entree_client = (char * )malloc(sizeof(char)*taille_entree);
     int sortir = 0;
-    afficher_message_par_default();
     while (sortir == 0)
     {
         int result = demander_entree(&entree_client, &taille_entree);
@@ -24,11 +23,6 @@ void initialiser_interface()
         }
     }
     free(entree_client);
-}
-
-void afficher_message_par_default()
-{
-    printf("Bienvenue sur le chat!\n");
 }
 
 int demander_entree(char **entree_client, size_t *taille_entree)

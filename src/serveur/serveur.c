@@ -33,13 +33,20 @@ int creer_socket()
         perror("Erreur de création de socket");
         exit(1);
     }
+
+    if (setsockopt(descripteur_socket, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) < 0)
+    {
+        perror("Erreur lors du setsockopt(SO_REUSEADDR)\n");
+        exit(1);
+    }
+
     return descripteur_socket;
 }
 
-void fermer_socket()
+void fermer_socket(int descripteur)
 {
-    shutdown(descripteur_socket,SHUT_RDWR);
-    if (close(descripteur_socket) < 0)
+    shutdown(descripteur, SHUT_RDWR);
+    if (close(descripteur) < 0)
     {
         perror("Erreur de fermeture de la socket");
         exit(1);

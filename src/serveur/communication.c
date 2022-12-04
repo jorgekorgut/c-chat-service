@@ -88,10 +88,11 @@ void *ecouter_clients()
             perror("Erreur dans la creation du thread d'ecoute d'un client.");
         }
     }
+
     pthread_exit(NULL);
 }
 
-void ecrire_message_au_client(int description_socket_client, char * message, int taille_message)
+void envoyer_message_client(int description_socket_client, char * message, int taille_message)
 {
     write(description_socket_client, message, taille_message);
 }

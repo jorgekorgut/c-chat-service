@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "linkedlist_connexion.h"
+#include "serveur.h"
 
 int initialiser_linkedlist_connexions(linkedlist_connexion_client *liste)
 {
@@ -38,8 +39,6 @@ connexion_client *trouver_connexion_par_description_socket(linkedlist_connexion_
     return iterator;
 }
 
-// FIXME : Erreur quand on passe /pseudo jorge. Peut etre une erreur de lecture a une memoire qui n'apartient pas a un processus d'ecoute client
-// FIXME : Erreur de finalisation du serveur. Quand le serveur quite avant le client, le serveur continue a tourner en arriere plan.
 connexion_client *trouver_connexion_par_pseudo(linkedlist_connexion_client *liste, char *pseudo)
 {
     connexion_client *iterator = liste->debut;
@@ -47,7 +46,7 @@ connexion_client *trouver_connexion_par_pseudo(linkedlist_connexion_client *list
     while (iterator != NULL)
     {
         if (iterator->pseudo != NULL)
-        {
+        {   
             if (strcmp(iterator->pseudo, pseudo) == 0)
             {
                 break;
@@ -90,12 +89,11 @@ int enlever_connexion(linkedlist_connexion_client *liste, connexion_client *enle
 
 int fermer_connexion(connexion_client *eliminer)
 {
-    if (eliminer->pseudo != NULL)
-    {
-        free(eliminer->pseudo);
-    }
+    fermer_socket(eliminer->descripteur_socket_client);
+    pthread_join(*eliminer->thread_client, NULL);
     free(eliminer->thread_client);
     free(eliminer->adresse);
+    free(eliminer->pseudo);
     free(eliminer);
 
     return 1;

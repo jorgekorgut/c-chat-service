@@ -1,4 +1,5 @@
 build
 database/*.db
+database/personal.sql
 *.o
 .vscode

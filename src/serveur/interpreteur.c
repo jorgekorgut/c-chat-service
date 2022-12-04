@@ -116,12 +116,13 @@ void interpreter_commande_privee(connexion_client *connexion, char *message)
 void interpreter_commande_aide(connexion_client *connexion)
 {
     char message_reponse[TAILLE_MAX_MESSAGE] = "-- Aide --\n \
-    '/creer <votre pseudo>' <votre mot de passe> - pour creer un compte. \n\
-    '/connecter <votre pseudo>' <votre mot de passe> - pour se connecter. \n\
-    '/deconnecter <votre pseudo>' - pour se deconnecter. \n\
+    `<message>` - pour ecrire une message globale. \n\
+    `/creer <votre pseudo>` <votre mot de passe> - pour creer un compte. \n\
+    `/connecter <votre pseudo>` <votre mot de passe> - pour se connecter. \n\
+    `/deconnecter <votre pseudo>` - pour se deconnecter. \n\
     `/pseudo <votre pseudo>` - pour changer de pseudo. \n\
     `/privee <pseudo> <message>` - pour envoyer des messages prives. \n\
-    `/groupe aide - pour afficher les commandes relationne aux groupes.";
+    `/groupe aide` - pour afficher les commandes relationne aux groupes.";
 
     envoyer_message_client(connexion->descripteur_socket_client, message_reponse, strlen(message_reponse));
 }

@@ -1,5 +1,4 @@
 # Chat
-## Sommaire
  
 ## Choix architecturaux
 ![Flux reseaux](/docs/diagrammes_reseaux.drawio.png)

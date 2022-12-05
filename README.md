@@ -2,8 +2,6 @@
  
 ## Choix architecturaux
 ![Flux reseaux](/docs/diagrammes_reseaux.drawio.png)
-
-### Architecture reseaux
  
 ## Fonctionnalitées implantées
  

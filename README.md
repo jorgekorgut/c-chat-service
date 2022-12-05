@@ -43,7 +43,9 @@ sudo apt install libsqlite3-dev
 ```
  
 Pour le chiffrement la librairie openssl-crypto doit etre instalée.
-`sudo apt install libssl-dev`
+```
+sudo apt install libssl-dev
+```
  
 Après, pour créer la base de données SQLITE et compiler le programme, vous lancez le script run.
 ```

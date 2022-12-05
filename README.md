@@ -61,6 +61,6 @@ Si vous voulez changer le port, veuillez accéder les fichiers `src/serveur/code
 Afin de voir la totalité des commandes du chat et comprendre comment utiliser l'application. Veuillez rentrer `/aide` sur la console.
  
 ## Critique du projet
-L'application de chat développé a été très riche pour l'apprentissage du fonctionnement du protocole TCP avec des Sockets. En plus du monter en compétence avec l'implémentation détaillé de cette technologie en C, ce projet m'a permis de remarquer l'importance d'une bonne structuration des fichiers et d'une identification totif des tâches. Ce dernier permet l'avancement fluide et correct du développement.
+L'application de chat développé a été très riche pour l'apprentissage du fonctionnement du protocole TCP et des sockets. En plus du monter en compétence avec l'implémentation détaillé de cette technologie en C, ce projet m'a permis de remarquer l'importance d'une bonne structuration des fichiers et d'une identification totif des tâches liées à la conception. Avec les idées claires en tête et une bonne organisation le déroulement du projet a été fluide et correcte.
 Comme pistes d'amélioration, le projet aurait pu avoir des cryptages des messages au niveau serveur et client, affichages des informations d'un groupe, une interface graphique, ...
 De plus, un makefile plus pompeux aurait pu permettre la séparation plus élégante des fichiers.
